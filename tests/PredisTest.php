@@ -73,10 +73,10 @@ final class PredisTest extends TestCase
 
     public function testPubSub(): void
     {
-        if (\extension_loaded('phasync')) {
-            // phasync-ext: a writable() wait on a new async-connecting socket never wakes while another
-            // fiber waits readable on a different socket (Chatter task ext-writable). Unskip when fixed.
-            $this->markTestSkipped('phasync extension: writable() hang, see task ext-writable');
+        if (\extension_loaded('phasync') && \version_compare(\phpversion('phasync'), '0.5.0-beta7', '<')) {
+            // phasync extension <= 0.5.0-beta6 runs foreach() over an Iterator (the pub/sub loop) as a C-originated
+            // call and blocks the whole process in readable(); fixed in phasync-ext 3eea031 (Chatter task ext-writable).
+            $this->markTestSkipped('phasync extension < 0.5.0-beta7: writable() hang during foreach over an Iterator');
         }
         $got = run(function () {
             $sub = go(function () {
