@@ -73,6 +73,11 @@ final class PredisTest extends TestCase
 
     public function testPubSub(): void
     {
+        if (\extension_loaded('phasync')) {
+            // phasync-ext: a writable() wait on a new async-connecting socket never wakes while another
+            // fiber waits readable on a different socket (Chatter task ext-writable). Unskip when fixed.
+            $this->markTestSkipped('phasync extension: writable() hang, see task ext-writable');
+        }
         $got = run(function () {
             $sub = go(function () {
                 $c = client(REDIS + ['read_write_timeout' => 0]);
