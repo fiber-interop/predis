@@ -1,11 +1,11 @@
 <?php
 
-namespace async\predis\Tests;
+namespace fiber\predis\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Predis\Connection\ConnectionException;
-use function async\{run, go, await, await_all, sleep};
-use function async\predis\client;
+use function fiber\{run, go, await, await_all, sleep};
+use function fiber\predis\client;
 
 final class PredisTest extends TestCase
 {
@@ -14,7 +14,7 @@ final class PredisTest extends TestCase
         $c = client(REDIS);
         $c->set('fi:outside', 'v');
         $this->assertSame('v', $c->get('fi:outside'));
-        $this->assertInstanceOf(\async\predis\Connection::class, $c->getConnection());
+        $this->assertInstanceOf(\fiber\predis\Connection::class, $c->getConnection());
     }
 
     public function testOverlap(): void

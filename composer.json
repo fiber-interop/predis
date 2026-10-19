@@ -1,11 +1,11 @@
 {
     "name": "fiber-interop/predis",
-    "description": "Cooperative Predis for fiber-interop/api: a StreamConnection that waits on the socket with async\\readable()/writable(), so Redis commands suspend only the calling task.",
+    "description": "Cooperative Predis for fiber-interop/api: a StreamConnection that waits on the socket with fiber\\readable()/writable(), so Redis commands suspend only the calling task.",
     "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "fiber-interop/api": "^0.2",
+        "fiber-interop/api": "^0.3",
         "predis/predis": "^2"
     },
     "require-dev": {
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "async\\predis\\": "src/"
+            "fiber\\predis\\": "src/"
         },
         "files": [
             "src/functions.php"
@@ -26,12 +26,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "async\\predis\\Tests\\": "tests/"
+            "fiber\\predis\\Tests\\": "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.1.x-dev"
+            "dev-main": "0.2.x-dev"
         }
     },
     "minimum-stability": "dev",

@@ -1,6 +1,6 @@
 <?php
 
-namespace async\predis;
+namespace fiber\predis;
 
 use Predis\Command\CommandInterface;
 use Predis\Connection\ParametersInterface;
@@ -9,8 +9,8 @@ use Predis\Response\Error as ErrorResponse;
 use Predis\Response\Status as StatusResponse;
 
 /**
- * Predis's StreamConnection with cooperative I/O. Inside async\run() connecting, the TLS handshake,
- * writing and reading wait on the socket with async\writable()/async\readable(), so only the calling
+ * Predis's StreamConnection with cooperative I/O. Inside fiber\run() connecting, the TLS handshake,
+ * writing and reading wait on the socket with fiber\writable()/fiber\readable(), so only the calling
  * task is suspended. Outside run() the same non-blocking loops wait with stream_select(), which
  * behaves like the blocking original. Errors are Predis's own: ConnectionException for refused,
  * timed out or lost connections, ProtocolException for garbage.
@@ -24,7 +24,7 @@ class Connection extends StreamConnection
 
     private static function inRun(): bool
     {
-        return \async\Registry::$active !== [];
+        return \fiber\Registry::$active !== [];
     }
 
     /** Wait until $socket is readable (or writable); false on timeout. */
@@ -36,8 +36,8 @@ class Connection extends StreamConnection
         }
         if (self::inRun()) {
             try {
-                $write ? \async\writable($socket, $timeout) : \async\readable($socket, $timeout);
-            } catch (\async\TimeoutException) {
+                $write ? \fiber\writable($socket, $timeout) : \fiber\readable($socket, $timeout);
+            } catch (\fiber\TimeoutException) {
                 return false;
             }
             return true;
